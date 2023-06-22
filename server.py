@@ -1,16 +1,27 @@
 from fastapi import FastAPI
 from pydantic import BaseModel
+from typing import List
 
 app = FastAPI()
 
 
-class Cadastro(BaseModel):
+class Animal(BaseModel):
+    id: int
     nome: str
-    CPF: str
-    email: str
-    senha: str
+    idade: int
+    sexo: str
+    cor: str
 
 
-@app.post('/cadastro')
-def cadastro_user(cadastro: Cadastro):
-    return {"mensagem": f"usuário {cadastro.nome} cadastrado com sucesso no HORUS!"}
+banco: List[Animal] = []
+
+
+@app.get('/animais')
+def listar_animais():
+    return banco
+
+
+@app.post('/animais')
+def criar_animal(animais: Animal):
+    banco.append(animais)
+    return None
