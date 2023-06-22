@@ -22,6 +22,6 @@ def listar_animais():
 
 
 @app.post('/animais')
-def criar_animal(animal: Animal):
-    banco.append(animal)
+def criar_animal(animais: Animal):
+    banco.append(animais)
     return None
