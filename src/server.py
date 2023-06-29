@@ -5,7 +5,7 @@ from src.schemas.schemas import Produto, Usuario
 from src.infra.sqlalchemy.repositorios.produto import RepositorioProduto
 from src.infra.sqlalchemy.repositorios.usuario import RepositorioUsuario
 
-
+# criando o banco de dados 
 criar_db()
 
 app = FastAPI()
