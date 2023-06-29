@@ -1,69 +1,35 @@
-from fastapi import FastAPI
-from pydantic import BaseModel
-from fastapi.middleware.cors import CORSMiddleware
-from typing import List, Optional
-from uuid import uuid4
+from fastapi import FastAPI, Depends
+from sqlalchemy.orm import Session
+from src.infra.sqlalchemy.config.database import get_db, criar_db
+from src.schemas.schemas import Produto, Usuario
+from src.infra.sqlalchemy.repositorios.produto import RepositorioProduto
+from src.infra.sqlalchemy.repositorios.usuario import RepositorioUsuario
+
+
+criar_db()
 
 app = FastAPI()
 
-origins = ['http://127.0.0.1:5500']
 
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=origins,
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"]
-)
-
-class Animal(BaseModel):
-    id: Optional[str]
-    nome: str
-    idade: int
-    sexo: str
-    cor: str
+@app.post('/produtos')
+def criar_produto(produto: Produto, db: Session = Depends(get_db)):
+    produto_criado = RepositorioProduto(db).criar(produto)
+    return produto_criado
 
 
-banco: List[Animal] = []
+@app.get('/produtos')
+def listar_produtos(db: Session = Depends(get_db)):
+    produtos = RepositorioProduto(db).listar()
+    return produtos
 
 
-@app.get('/')
-def home():
-    texto = 'API funcionando'
-    return texto
+@app.post('/usuarios')
+def criar_usuario(usuario: Usuario, db: Session = Depends(get_db)):
+    usuario_criado = RepositorioUsuario(db).criar(usuario)
+    return usuario_criado
 
 
-@app.get('/animais')
-def listar_animais():
-    return banco
-
-
-@app.get('/animais/{animal_id}')
-def obter_animal(animal_id: str):
-    for animal in banco:
-        if animal.id == animal_id:
-            return animal
-    return {'erro': 'Animal não localizado'}
-
-
-@app.delete('/animais/{animal_id}')
-def remover_animal(animal_id: str):
-    posicao = -1
-    # buscar a posição do animal
-    for index, animal in enumerate(banco):
-        if animal.id == animal_id:
-            posicao = index
-            break
-
-    if posicao != -1:
-        banco.pop(posicao)
-        return {'mensagem': 'Animal removido com sucesso!'}
-    else:
-        return {'erro': 'Animal não localizado'}
-
-
-@app.post('/animais')
-def criar_animal(animal: Animal):
-    animal.id = str(uuid4())
-    banco.append(animal)
-    return None
+@app.get('/usuarios')
+def listar_usuario(db: Session = Depends(get_db)):
+    usuarios = RepositorioUsuario(db).listar()
+    return usuarios
