@@ -17,6 +17,15 @@ class Produto(BaseModel):
     class Config:
         orm_mode = True
 
+
+class ProdutoSimples(BaseModel):
+    nome: str
+    id: Optional[str] = None
+    preco: float
+
+    class Config:
+        orm_mode = True
+
 class Pedido(BaseModel):
     id: Optional[str] = None
     quantidade: int
