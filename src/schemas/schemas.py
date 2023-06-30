@@ -5,6 +5,7 @@ class Usuario(BaseModel):
     id: Optional[str] = None
     nome: str
     telefone: str
+    # produtos: List[produtos] = []
 
 
 class Produto(BaseModel):
