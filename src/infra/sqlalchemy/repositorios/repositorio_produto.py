@@ -27,9 +27,9 @@ class RepositorioProduto():
     def editar(self, id: int, produto: schemas.Produto):
         update_stmt = update(models.Produto).where(
             models.Produto.id == id).values(nome=produto.nome,
-                                                    detalhes=produto.detalhes,
-                                                    preco=produto.preco,
-                                                    disponivel=produto.disponivel)
+                                            detalhes=produto.detalhes,
+                                            preco=produto.preco,
+                                            disponivel=produto.disponivel)
         self.session.execute(update_stmt)
         self.session.commit()
 
