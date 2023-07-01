@@ -14,6 +14,7 @@ class RepositorioProduto():
                                     detalhes=produto.detalhes,
                                     preco=produto.preco,
                                     disponivel=produto.disponivel,
+                                    tamanho=produto.tamanho,
                                     usuario_id=produto.usuario_id)
         self.session.add(db_produto)
         self.session.commit()
@@ -34,7 +35,8 @@ class RepositorioProduto():
             models.Produto.id == id).values(nome=produto.nome,
                                             detalhes=produto.detalhes,
                                             preco=produto.preco,
-                                            disponivel=produto.disponivel)
+                                            disponivel=produto.disponivel,
+                                            tamanho=produto.tamanho)
         self.session.execute(update_stmt)
         self.session.commit()
 

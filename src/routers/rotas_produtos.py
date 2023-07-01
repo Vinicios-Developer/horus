@@ -24,7 +24,8 @@ def listar_produtos(db: Session = Depends(get_db)):
 def exibir_produto(id: int, session: Session = Depends(get_db)):
     produto_localizado = RepositorioProduto(session).buscarPorId(id)
     if produto_localizado is None:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Produto não encontrado com o id {id}")
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+                            detail=f"Produto não encontrado com o id {id}")
     return produto_localizado._asdict()
 
 
