@@ -57,3 +57,6 @@ class Pedido(BaseModel):
 
     usuario: Optional[UsuarioSimples]
     produto: Optional[ProdutoSimples]
+
+    class Config:
+        orm_mode = True

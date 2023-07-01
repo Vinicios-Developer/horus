@@ -1,4 +1,4 @@
-from sqlalchemy import update, delete, select
+from sqlalchemy import select
 from typing import List
 from sqlalchemy.orm import Session
 from src.schemas import schemas
@@ -21,15 +21,20 @@ class RepositorioPedido():
         self.session.refresh(pedido_db)
         return pedido_db
 
-    def buscar_por_id(self, id: int):
+    def buscar_por_id(self, id: int) -> models.Pedido:
         consulta = select(models.Pedido).where(models.Pedido.id == id)
         pedido = self.session.execute(consulta).scalars().one()
         return pedido
 
     def listar_meus_pedidos_por_usuario_id(self, usuario_id: int):
-        consulta = select(models.Pedido).where(models.Pedido.usuario_id == usuario_id)
+        consulta = select(models.Pedido).where(
+            models.Pedido.usuario_id == usuario_id)
         pedidos = self.session.execute(consulta).scalars().all()
         return pedidos
 
     def listar_minhas_vendas_por_usuario_id(self, usuario_id: int):
-        pass
+        query = select(models.Pedido) \
+            .join_from(models.Pedido, models.Produto) \
+            .where(models.Produto.usuario_id == usuario_id)
+        pedidos = self.session.execute(query).scalars().all()
+        return pedidos
