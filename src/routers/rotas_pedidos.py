@@ -31,7 +31,7 @@ def listar_pedidos(usuario_id: int, session: Session = Depends(get_db)):
     return pedidos
 
 
-@router.get('/pedidos/{usuario_id}/vendas')
+@router.get('/pedidos/{usuario_id}/vendas',  response_model=List[Pedido])
 def listar_vendas(usuario_id: int, session: Session = Depends(get_db)):
     pedidos = RepositorioPedido(
         session).listar_minhas_vendas_por_usuario_id(usuario_id)
