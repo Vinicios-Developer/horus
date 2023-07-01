@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from src.routers import rotas_produtos, rotas_usuarios
+from src.routers import rotas_produtos, rotas_usuarios, rotas_pedidos
 
 # criando o banco de dados
 # criar_db()
@@ -21,3 +21,5 @@ app.add_middleware(
 app.include_router(rotas_produtos.router)
 
 app.include_router(rotas_usuarios.router)
+
+app.include_router(rotas_pedidos.router)
