@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from src.routers import rotas_auth, rotas_produtos, rotas_pedidos
 
@@ -24,3 +24,14 @@ app.include_router(rotas_produtos.router)
 app.include_router(rotas_auth.router, prefix='/auth')
 
 app.include_router(rotas_pedidos.router)
+
+
+@app.middleware('http')
+async def processar_tempo_requisicao(request: Request, next):
+    print('Interceptou a chegada...')
+
+    response = await next(request)
+
+    print('Interceptou a volta...')
+
+    return response
