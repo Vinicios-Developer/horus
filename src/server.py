@@ -1,6 +1,7 @@
-from fastapi import FastAPI, Request
+from fastapi import FastAPI, Request, BackgroundTasks
 from fastapi.middleware.cors import CORSMiddleware
 from src.routers import rotas_auth, rotas_produtos, rotas_pedidos
+from src.jobs.write_notification import write_notification
 
 # criando o banco de dados
 # criar_db()
@@ -25,6 +26,10 @@ app.include_router(rotas_auth.router, prefix='/auth')
 
 app.include_router(rotas_pedidos.router)
 
+@app.post('/send_email/{email}')
+def send_email(email: str, background: BackgroundTasks):
+    background.add_task(write_notification, email, 'Vai, mano!')
+    return {"Ok": "Mensagem enviada..."}
 
 @app.middleware('http')
 async def processar_tempo_requisicao(request: Request, next):
